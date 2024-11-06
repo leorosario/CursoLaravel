@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
-    public function initMethod(): string
+    public function index(): void
     {
-        return "Hello World!";
+        echo "<p>Index</p>";
     }
 
-    public function viewPage(): View
+    public function about(): void
     {
-        return view("home");
+        echo "<p>About</p>";
+    }
+
+    public function contact(): void
+    {
+        echo "<p>Contact</p>";
     }
 }
