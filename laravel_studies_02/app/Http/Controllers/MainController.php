@@ -22,8 +22,27 @@ class MainController extends Controller
         return view("home", $data);
     }
 
-    public function submitForm(): void
+    public function submitForm(Request $request): void
     {        
-        echo "formulário submitido";
+        $request->validate([
+            "name" => "required",
+            "country" => "required|min:6"
+        ]);
+
+        echo "Formulário submetido com sucesso";
+    }
+
+    public function setSession(): View
+    {
+        session(["name" => "John Doe"]);
+
+        return view("home");
+    }
+
+    public function clearSession(): View
+    {
+        session()->forget("name");
+
+        return view("home");
     }
 }
