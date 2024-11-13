@@ -1,13 +1,33 @@
 @extends('layouts.main_layout')
-
-@section('page_title', 'Home Page')
-    
 @section('content')
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col card p-5 bg-secondary text-center">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum beatae vitae quas consequatur. Esse, nulla. Quod, ullam repudiandae quia saepe laborum asperiores commodi ut odit omnis molestias sequi, porro nam.
-            </div>
-        </div>
-    </div>
+    
+    {{-- <div class="text-center">
+        @foreach ($pessoas_linguas as $pessoa => $linguas)
+            <x-card-pessoa :$pessoa :$linguas />
+        @endforeach
+    </div> --}}
+    
+    {{-- componentes e slots --}}
+    {{-- <div>
+        <h4 class="text-info">Como funciona um Slot?</h4>
+        <x-other-card>
+            <h1 class="text-danger">Este é o Slot!</h1>
+        </x-other-card>
+    </div> --}}
+
+    {{-- <x-multi-slot>
+        <x-slot:title>Este é o título</x-slot>
+        <x-slot:content>Este é o conteúdo</x-slot>
+        <x-slot:footer>
+            <ul>
+                <li>Item1</li>
+                <li>Item2</li>
+                <li>Item3</li>
+            </ul>
+        </x-slot>
+    </x-multi-slot> --}}
+    <h4>Componente anónimo</h4>
+    <x-alert-card>Primeira Mensagem</x-alert-card>
+    <x-alert-card>Segundo Mensagem</x-alert-card>
+    <x-alert-card>Terceira Mensagem</x-alert-card>
 @endsection
