@@ -6,14 +6,15 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class OtherCard extends Component
+class MainLayout extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public string $pageTitle;
+    public function __construct(string $pageTitle)
     {
-        //
+        $this->pageTitle = $pageTitle;
     }
 
     /**
@@ -21,6 +22,6 @@ class OtherCard extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.other-card');
+        return view('components.main-layout');
     }
 }
