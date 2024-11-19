@@ -204,11 +204,11 @@ class MainController extends Controller
         //     ->delete();
 
         //DELETE - SOFT
-        DB::table("clients")
-            ->where("id", 11)
-            ->update([
-                "deleted_at" => Carbon::now()               
-            ]);
+        // DB::table("clients")
+        //     ->where("id", 11)
+        //     ->update([
+        //         "deleted_at" => Carbon::now()               
+        //     ]);
     }
 
     private function showRawData($data)
