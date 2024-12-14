@@ -2,87 +2,74 @@
 
 namespace App\Http\Controllers;
 
-//use App\Models\Product;
-
-use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Models\Client;
 
 class MainController extends Controller
 {
     public function index()
     {
-        // buscar todos os dados dos produtos
-        //$results = Product::all(); //SELECT * FROM products
+        echo "Eloquent Relações";
+    }
 
-        //buscar todos os dados com um array associativo
+    public function OneToOne()
+    {
+        // buscar o telefone de um cliente
+        // $client1 = Client::find(12)->phone;
+        // echo "Telefone do cliente ID: " . $client1->client_id . " : " . $client1->phone_number;
+        // echo "<hr>";
 
-        //buscar produtos ordenados pelo nome alfabeticamente
-        // $results = Product::orderBy("product_name")->get()->toArray();
+        // todos os dados do cliente e o telefone dele
+        // $client2 = Client::find(12);
+        // $phone = $client2->phone->phone_number;
+        // echo "<br>";
+        // echo "Nome do cliente: " . $client2->client_name . "<br>";
+        // echo "Telefone do cliente: " . $phone;
+        // echo "<hr>";
 
-        //buscar os 3 primeiros produtos
-        // $results = Product::limit(3)->get()->toArray();
+        //outra forma é usando o método with()
+        // $client3 = Client::with("phone")->find(12);
+        // $phone = $client3->phone->phone_number;
+        // echo "<br>";
+        // echo "Nome do cliente: " . $client3->client_name . "<br>";
+        // echo "Telefone do cliente: " . $phone;
+        // echo "<hr>";
 
-        // $results = Product::find(10)->toArray();
+        $clients = Client::with("phone")->get();
+        foreach($clients as $client){
+            echo "<br>";
+            echo "Nome do cliente: " . $client->client_name .  " - Telefone: " . $client->phone->phone_number;
+        }
+    }
 
-        //Usar a cláusula Where
-        // $results = Product::Where("price", ">=", 70)->get()->toArray();
-
-        // $results = Product::Where("price", ">=", 70)->first()->toArray();
-
-        //Buscar apenas o primeiro elemento se ele existir, caso contrário retorna array vazio
-        // $results = Product::Where("price", ">=", 190)->firstOr(function (){
-        //     return [];
-        // });
-
-        // $product = Product::find(10);
-        // echo $product->price; //valor da bd
-        // echo '<br>';
-        // $product->price = 200; //definir um novo preço apenas no código (não na BD)
-        // echo $product->price;
-        // echo '<br>';
-
-        // $product->refresh(); // volta a recuperar o preço original na BD
-        // echo $product->price;
-        // echo '<br>';
+    public function OneToMany()
+    {
+        // Buscar o id e o nome do cliente e todos os telefones dele
+        // $client1 = Client::find(10);
+        // $phones = $client1->phones;
+        // echo "Cliente: " . $client1->client_name . "<br>";        
+        // echo "Telefones: <br> ";
+        // foreach($phones as $phone){            
+        //     echo $phone->phone_number . "<br>";
+        // }  
         
-        //$this->showData($results);
-
-        // $product = Product::find(10);
-        // echo $product->product_name . "<br>";
-
-        // $product = Product::Where("price", ">=", 70)->first();
-        // echo $product->product_name . " te um preço de " . $product->price . "<br>";
-
-        // $product = Product::firstWhere("price", ">=", 60);
-        // echo $product->product_name . " te um preço de " . $product->price . "<br>";
-
-        // $product = Product::findOr(100, function(){
-        //     echo "Não foi encontrado o produto desejado";
-        // });
-
-        // if($product){
-        //     echo $product->product_name . " te um preço de " . $product->price . "<br>";
+        // $client2 = Client::with("phones")->find(10);
+        // echo "<br>";
+        // echo "Cliente: " . $client2->client_name . "<br>";        
+        // echo "Telefones: <br> ";
+        // foreach($client2->phones as $phone){            
+        //     echo $phone->phone_number . "<br>";
         // }
 
-        // $product = Product::findOrFail(120);
-        // echo $product->product_name . " te um preço de " . $product->price . "<br>";
-
-        $total_products = Product::count();
-        $product_max_price = Product::max("price");
-        $product_min_price = Product::min("price");
-        $product_avg_price = Product::avg("price");
-        $product_sum_price = Product::sum("price");
-
-        $results = [
-            "total_products" => $total_products,
-            "product_max_price" => $product_max_price,
-            "product_min_price" => $product_min_price,
-            "product_avg_price" => $product_avg_price,
-            "product_sum_price" => $product_sum_price
-        ];
-
-        $this->showData($results);
-        
+        // vamos buscar todos os clientes e os seus telefones
+        $clients = Client::with("phones")->get();
+        foreach ($clients as $client) {
+            echo "<br>";
+            echo "Cliente: " . $client->client_name . "<br>";        
+            echo "Telefones: <br> ";
+            foreach($client->phones as $phone){            
+                echo $phone->phone_number . "<br>";
+        }
+        }
     }
 
     private function showData($data)
