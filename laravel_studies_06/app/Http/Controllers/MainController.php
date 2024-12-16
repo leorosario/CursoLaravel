@@ -111,6 +111,65 @@ class MainController extends Controller
         } 
     }
 
+    public function RunningQueries()
+    {
+        //vamos buscar um cliente e os seus telefones, mas só queremos os telefones que começa por 8
+        // $client1 = Client::find(1);
+        // $phones = $client1->phones()->where("phone_number", "like", "8%")->get();
+        // echo "Cliente: " . $client1->client_name . "<br>";
+        // echo "Telefones: <br>";
+        // foreach ($phones as $phone) {
+        //     echo $phone->phone_number . "<br>";
+        // }
+
+        //buscar todos os produtos que um cliente comprou, mas só queremos os produtos que custam mais de 50
+        // $client2 = Client::find(1);
+        // $products = $client2->products()->where("price", ">", 50)->get();
+        // echo "Cliente: " . $client2->client_name . "<br>";
+        // foreach ($products as $product) {
+        //     echo $product->product_name . " - " . $product->price . "<br>";
+        // }
+
+        //vão aparecer produtos repetidos. Para evitar isso, podemos usar o método distinct() e vamos ordenar
+        //os produtos por ordem alfabética do nome
+        echo "<hr>";
+        $client2 = Client::find(1);
+        $products = $client2->products()
+            ->where("price", ">", 50)            
+            ->distinct()
+            ->orderBy("product_name")
+            ->get();
+        echo "Cliente: " . $client2->client_name . "<br>";
+        foreach ($products as $product) {
+            echo $product->product_name . " - " . $product->price . "<br>";
+        }
+
+    }
+
+    public function SameResults()
+    {
+        //vamos buscar os mesmos resultados, mas sem usar as relações
+        //vamos buscar os clientes e os seus telefones
+        // $client1 = Client::find(1);
+        // $phones = Phone::where("client_id", $client1->id)->get();
+        // echo "Cliente: " . $client1->client_name . "<br>";
+        // foreach ($phones as $phone) {
+        //     echo $phone->phone_number . "<br>";
+        // }
+
+        //vamos buscar todos os produtos que um cliente comprou
+        $client2 = Client::find(1);
+        $products = Product::join("orders", "products.id", "=", "orders.product_id")
+            ->where("orders.client_id", $client2->id)
+            ->get();
+        echo "<br>";
+        echo "Cliente: " . $client2->client_name . "<br>";
+        echo "Produtos: <br>";
+        foreach ($products as $product) {
+            echo $product->product_name . " - " . $product->price . "<br>";
+        }
+    }
+
     private function showData($data)
     {
         echo "<pre>";
