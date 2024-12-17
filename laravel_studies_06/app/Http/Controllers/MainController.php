@@ -170,6 +170,38 @@ class MainController extends Controller
         }
     }
 
+    public function Collections()
+    {
+        // $clients = Client::take(5)->get();
+        // foreach($clients as $client){
+        //     echo $client->client_name . "<br>";
+        // }
+
+        // APPEND
+        $clients = Client::take(5)->get();
+        $clients = $clients->each->append(["client_name_uppercase", "email_domain"]);
+        foreach($clients as $client){
+            $client->client_name_uppercase = strtoupper($client->client_name);
+            $client->email_domain = explode("@", $client->email)[1];            
+        }
+
+        //agora podemos apresentar os dados
+        foreach($clients as $client){            
+            echo $client->client_name . " - " . $client->client_name_uppercase . " - " . $client->email_domain . "<br>";
+        }
+
+        //CONTAINS
+        $clients = Client::take(5)->get();
+        $results = $clients->contains("client_name", "Mirela Alice Lopes");
+        var_dump($results);
+
+        //DIFF
+        $clients1 = Client::take(5)->get();
+        $clients2 = Client::take(3)->get();
+        $results = $clients->diff($clients2)->toArray();
+        $this->showData($results);
+    }
+
     private function showData($data)
     {
         echo "<pre>";
