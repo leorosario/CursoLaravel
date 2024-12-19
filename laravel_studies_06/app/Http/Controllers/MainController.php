@@ -177,29 +177,70 @@ class MainController extends Controller
         //     echo $client->client_name . "<br>";
         // }
 
-        // APPEND
-        $clients = Client::take(5)->get();
-        $clients = $clients->each->append(["client_name_uppercase", "email_domain"]);
-        foreach($clients as $client){
-            $client->client_name_uppercase = strtoupper($client->client_name);
-            $client->email_domain = explode("@", $client->email)[1];            
-        }
+        // // APPEND
+        // $clients = Client::take(5)->get();
+        // $clients = $clients->each->append(["client_name_uppercase", "email_domain"]);
+        // foreach($clients as $client){
+        //     $client->client_name_uppercase = strtoupper($client->client_name);
+        //     $client->email_domain = explode("@", $client->email)[1];            
+        // }
 
-        //agora podemos apresentar os dados
-        foreach($clients as $client){            
-            echo $client->client_name . " - " . $client->client_name_uppercase . " - " . $client->email_domain . "<br>";
-        }
+        // //agora podemos apresentar os dados
+        // foreach($clients as $client){            
+        //     echo $client->client_name . " - " . $client->client_name_uppercase . " - " . $client->email_domain . "<br>";
+        // }
 
-        //CONTAINS
-        $clients = Client::take(5)->get();
-        $results = $clients->contains("client_name", "Mirela Alice Lopes");
-        var_dump($results);
+        // //CONTAINS
+        // $clients = Client::take(5)->get();
+        // $results = $clients->contains("client_name", "Mirela Alice Lopes");
+        // var_dump($results);
 
-        //DIFF
+        // //DIFF
+        // $clients1 = Client::take(5)->get();
+        // $clients2 = Client::take(3)->get();
+        // $results = $clients1->diff($clients2)->toArray();
+        // $this->showData($results);
+
+        // INTERSECT
         $clients1 = Client::take(5)->get();
-        $clients2 = Client::take(3)->get();
-        $results = $clients->diff($clients2)->toArray();
+        $clients2 = Client::where("id", ">", 3)->take(5)->get();
+        $results = $clients1->intersect($clients2)->toArray();
         $this->showData($results);
+
+        echo "<hr>";
+        // MAKEHIDDEN
+        $clients = Client::take(15)->get();
+        $clients->makeHidden(["id", "created_at", "updated_at", "deleted_at"]);
+        $this->showData($clients->toArray());
+    }
+
+    public function Serialization()
+    {
+        // $clients = Client::take(10)->get();
+        // $clients = $clients->toArray();
+        // $this->showData($clients);
+
+        // $clients = Client::take(10)->get()->toArray();        
+        // $this->showData($clients);
+
+        // $client = Client::find(100)->toArray();
+        // $this->showData($client);
+
+        // $clients = Client::take(10)->get()->toJson(JSON_PRETTY_PRINT); 
+        // echo "<pre>";       
+        // echo $clients;
+
+        // $clients = Client::take(10)
+        //     ->get()
+        //     ->setHidden(["id", "active", "created_at", "updated_at", "deleted_at"])
+        //     ->toJson(JSON_PRETTY_PRINT);
+        // $this->showData($clients);
+
+        $clients = Client::take(10)
+            ->get()
+            ->setVisible(["client_name", "email"])
+            ->toJson(JSON_PRETTY_PRINT);
+        $this->showData($clients);
     }
 
     private function showData($data)
