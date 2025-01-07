@@ -18,13 +18,29 @@
 
                     <div class="mt-4 d-flex justify-content-between">
                         <div>
-                            <a href="#">Ainda não tem conta?</a>
+                            <div>
+                                <a href="{{ route("register") }}">Ainda não tem conta?</a>
+                            </div>                            
+                            <div>
+                                <a href="{{ route("password.request") }}">Esqueceu a senha?</a>
+                            </div>
                         </div>
                         <div class="text-end">
                             <button type="submit" class="btn btn-secondary px-5">LOGIN</button>
                         </div>
                     </div>
                 </form>
+
+                {{-- errors --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger mt-4">
+                        <u class="m-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </u>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
