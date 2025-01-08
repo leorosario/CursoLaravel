@@ -7,3 +7,5 @@ Route::get('/',function(){
     DB::connection()->getPdo();
 
 });
+
+Route::view('/teste', "teste");
