@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewUserConfirmation;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -90,7 +93,7 @@ class AuthController extends Controller
         return view("auth.register");
     }
 
-    public function store_user(Request $request): void
+    public function store_user(Request $request): RedirectResponse|View
     {
         //form validation
         $request->validate(
@@ -124,6 +127,44 @@ class AuthController extends Controller
         $user->password = bcrypt($request->password);
         $user->token = Str::random(64);
 
-        dd($user);
+        // gerar link
+        $confirmation_link = route("new_user_confirmation", ["token" => $user->token]);
+
+        // enviar email
+        $result = Mail::to($user->email)->send(new NewUserConfirmation($user->username, $confirmation_link));
+
+        // verficiar se o email foi enviado com sucesso
+        if(!$result){
+            return back()->withInput()->with([
+                "server_error" => "Ocorreu um erro ao enviar o email de confirmação."
+            ]);
+        }
+
+        // criar o usuário na base de dados
+        $user->save();
+
+        // apresentar view de sucesso
+        return view("auth.email_sent", ["email" => $user->email]);
+    }
+
+    public function new_user_confirmation($token)
+    {
+        // verificar se o token é válido
+        $user = User::where("token", $token)->first();
+        if(!$user){
+            return redirect()->route("login");
+        }
+
+        //confirmar o registro do usuário
+        $user->email_verified_at = Carbon::now();
+        $user->token = null;
+        $user->active = true;
+        $user->save();
+
+        // autenticação automática (login) do usuário confirmado
+        Auth::login($user);
+
+        // apresenta uma mensagem de sucesso
+        return view("auth.new_user_confirmation");
     }
 }
