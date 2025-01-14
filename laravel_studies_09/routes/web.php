@@ -23,7 +23,7 @@ Route::middleware("guest")->group(function(){
 
     // reset password
     Route::get("/reset_password/{token}", [AuthController::class, "reset_password"])->name("reset_password");
-    Route::get("/reset_password", [AuthController::class, "reset_password_update"])->name("reset_password_update");
+    Route::post("/reset_password", [AuthController::class, "reset_password_update"])->name("reset_password_update");
 });
 
 Route::middleware("auth")->group(function(){
@@ -33,6 +33,9 @@ Route::middleware("auth")->group(function(){
     // profile -change password
     Route::get("/profile", [AuthController::class, "profile"])->name("profile");
     Route::post("/profile", [AuthController::class, "change_password"])->name("change_password");
+
+    // delete account
+    Route::post("/delete_account", [AuthController::class, "delete_account"])->name("delete_account");
 
     // logout
     Route::get("/logout", [AuthController::class, "logout"])->name("logout");

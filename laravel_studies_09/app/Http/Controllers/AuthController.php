@@ -269,7 +269,82 @@ class AuthController extends Controller
         return back()->with([
             "server_message" => $generic_message
         ]);
+    }
 
+    public function reset_password($token): View | RedirectResponse
+    {
+        // verificar se o token é válido
+        $user = User::where("token", $token)->first();
+        if(!$user){
+            return redirect()->route("login");
+        }
+        return view("auth.reset_password", ["token" => $token]);
+    }
+
+    public function reset_password_update(Request $request): RedirectResponse
+    {
+        // form validation
+        $request->validate(
+            [
+                'token' => 'required',
+                'new_password' => 'required|min:8|max:32|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/',
+                'new_password_confirmation' => 'required|same:new_password'
+            ],
+            [
+                // não coloco mensagem para o token porque não é suposto o utilizador alterar o token
+                // nem ter acesso a essa informação
+                'new_password.required' => 'A nova senha é obrigatória.',
+                'new_password.min' => 'A nova senha deve conter no mínimo :min caracteres.',
+                'new_password.max' => 'A nova senha deve conter no máximo :max caracteres.',
+                'new_password.regex' => 'A nova senha deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número.',
+                'new_password_confirmation.required' => 'A confirmação da nova senha é obrigatória.',
+                'new_password_confirmation.same' => 'A confirmação da nova senha deve ser igual à nova senha.',
+            ]
+        );
         
+        // verifica se o é válido
+        $user = User::where("token", $request->token)->first();
+        if(!$user){
+            return redirect()->route("login");
+        }
+
+        // Atualizar a senha do user na base de dados
+        $user->password = bcrypt($request->new_password);
+        $user->token = null;
+        $user->save();
+
+        return redirect()->route("login")->with([
+            "success" => true
+        ]);
+    }
+
+    public function delete_account(Request $request)
+    {
+        // validação do formulário
+        $request->validate(
+            [
+                "delete_confirmation" => "required|in:ELIMINAR"
+            ],
+            [
+                "delete_confirmation.required" => "A confirmação é obrigatória",
+                "delete_confirmation.in" => "É obrigatório escrever a palavra ELIMINAR"
+            ]
+        );
+
+        // remover a conta e usuário (hard delete ou soft delete)
+
+        // soft delete
+        $user = Auth::user();
+        $user->delete();
+
+        // hard delete
+        // $user = Auth::user();
+        // $user = forceDelete();
+
+        // logout
+        Auth::logout();
+
+        // redirect para login
+        return redirect()->route("login")->with(["account_deleted" => true]);
     }
 }

@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticable;
 
 class User extends Authenticable
 {
-    use HasFactory;
-
-    //atributes that are hidden for seralization
-     protected $hidden = [
-        "password",
-        "token"
-     ];
+      use HasFactory;
+      use SoftDeletes;
+      //atributes that are hidden for seralization
+      protected $hidden = [
+         "password",
+         "token"
+      ];
 }
