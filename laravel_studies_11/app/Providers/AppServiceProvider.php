@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
 
         // gate for post delete
         Gate::define("post.delete", function(User $user, $post){
-            return ($user->role === "admin" || $user->id === $post->user_id);
+            return ($user->role === "admin" || ($user->id === $post->user_id));
         });      
     }
 }

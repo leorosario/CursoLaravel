@@ -9,7 +9,7 @@
 
     @can('post.create')
         <div class="max-w-7xl mx-auto mb-6 px-8 mt-6">
-            <a href="#" class="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-6 rounded">Create Post</a>
+            <a href="{{ route("post.create") }}" class="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-6 rounded">Create Post</a>
         </div>
     @endcan
 

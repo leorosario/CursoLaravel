@@ -21,7 +21,7 @@
                 <div class="mt-3 ps-5 text-end">
                     {{-- post delete --}}
                     @can('post.delete', $post)
-                        <a href="#" class="bg-red-400 hover:bg-red-600 text-white font-bold-py-2 px-6 rounded">Delete</a>
+                        <a href="{{ route("post.delete", ["id" => $post->id]) }}" class="bg-red-400 hover:bg-red-600 text-white font-bold-py-2 px-6 rounded">Delete</a>
                     @endcan
                 </div>
             </div>
