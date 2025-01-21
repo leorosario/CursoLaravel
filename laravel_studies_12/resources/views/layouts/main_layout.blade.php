@@ -11,8 +11,14 @@
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 </head>
 <body>
+
+    @auth
+        <x-user-bar />
+    @else
+        @include('layouts.topbar')
+    @endauth
     
-    @include('layouts.topbar')
+    
 
     @yield('content')
 
