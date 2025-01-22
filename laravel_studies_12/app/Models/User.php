@@ -14,4 +14,9 @@ class User extends Authenticable
     {
         return $this->hasMany(Post::class);
     }
+
+    public function permissions()
+    {
+        return $this->hasMany(UsersPermission::class);
+    }
 }

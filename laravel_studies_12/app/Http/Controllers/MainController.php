@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -42,10 +43,29 @@ class MainController extends Controller
     public function create(){ 
         // verify if the user is allowed to update the post
         //Parametro Post::class é para PostPolicy.php entender que é um Post e deve tratar também
-        if(Auth::user()->can("create", Post::class)){
-            echo "O usuário pode criar o post!";
+        // if(Auth::user()->can("create", Post::class)){
+        //     echo "O usuário pode criar o post!";
+        // }else{
+        //     echo "O usuário NÃO pode criar o post!";
+        // }
+
+        // -------------------------------
+        // $response = Gate::inspect("create", Post::class);
+
+        // if($response->allowed()){
+        //     echo "Usuário pode criar um post";
+        // }else{
+        //     echo $response->message(); 
+        // }
+
+        // ---------------------------------------------
+        $response = Gate::inspect("create", Post::class);
+        if($response->allowed()){
+            echo "Usuário pode criar um post";
         }else{
-            echo "O usuário NÃO pode criar o post!";
+            if($response->status() === 403){
+                abort(403, $response->message());
+            }
         }
     }
 }
