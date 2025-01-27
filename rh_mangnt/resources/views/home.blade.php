@@ -1,5 +1,8 @@
 <x-layout-app page-title="Home">
 
-    <h1 class="text-center">DENTRO DA APP</h1>
-
+    <div class="w-100 p-4">
+        <h3>Home</h3>
+        <hr>
+    </div>
+   
 </x-layout-app>
