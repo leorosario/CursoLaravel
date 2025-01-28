@@ -15,7 +15,7 @@
             <div class="row">
                 <x-profile-user-change-password />
                 
-                {{-- componente name - email --}}
+                <x-profile-user-change-data />             
             </div>
         </div>        
     </div>
