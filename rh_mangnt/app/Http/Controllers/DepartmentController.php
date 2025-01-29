@@ -42,10 +42,8 @@ class DepartmentController extends Controller
     public function editDepartment($id)
     {
         Auth::user()->can("admin") ?: abort(403, "You are not authorized to access this page");
-        
-        // check if id === 1
 
-        if(intval($id) === 1)
+        if($this->isDepartmentBlocked($id))
         {
             return redirect()->route("departments");
         }
@@ -63,11 +61,10 @@ class DepartmentController extends Controller
 
         $request->validate([
             "id" => "required",
-            "name" => "required|string|min:3|max:50|unique:departments,name," . $id
-        ]);
+            "name" => "required|string|min:3|max:50|unique:departments,name," . $id        ]);
 
-        // check if id === 1
-        if(intval($id) === 1)
+        
+        if($this->isDepartmentBlocked($id))
         {
             return redirect()->route("departments");
         }
@@ -84,9 +81,8 @@ class DepartmentController extends Controller
     public function deleteDepartment($id)
     {
         Auth::user()->can("admin") ?: abort(403, "You are not authorized to access this page"); 
-
-        // check if id === 1
-        if(intval($id) === 1)
+        
+        if($this->isDepartmentBlocked($id))
         {
             return redirect()->route("departments");
         }
@@ -99,10 +95,9 @@ class DepartmentController extends Controller
 
     public function deleteDepartmentConfirm($id)
     {
-        Auth::user()->can("admin") ?: abort(403, "You are not authorized to access this page"); 
+        Auth::user()->can("admin") ?: abort(403, "You are not authorized to access this page");         
         
-        // check if id === 1
-        if(intval($id) === 1)
+        if($this->isDepartmentBlocked($id))
         {
             return redirect()->route("departments");
         }
@@ -112,5 +107,10 @@ class DepartmentController extends Controller
         $department->delete();
         
         return redirect()->route("departments");
+    }
+
+    private function isDepartmentBlocked($id)
+    {
+        return in_array(intval($id), [1, 2]);
     }
 }
