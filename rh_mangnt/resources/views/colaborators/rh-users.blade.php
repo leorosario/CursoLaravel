@@ -21,22 +21,30 @@
                 <thead class="table-dark">
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Active</th>
+                    <th>Department</th>
                     <th>Role</th>
-                    <th>Salary</th>
                     <th>Admission date</th>
-                    <th>City</th>
+                    <th>Salary</th>
                     <th></th>
                 </thead>
                 <tbody>
                     @foreach ($colaborators as $colaborator)
                         <tr>
                             <td>{{ $colaborator->name }}</td>
-                            <td>{{ $colaborator->email }}</td>
-                            <td>{{ $colaborator->role }}</td>                           
-                            <td>{{ $colaborator->detail->salary }} $</td>
+                        <td>{{ $colaborator->email }}</td>
+                        <td>
+                            @empty($colaborator->email_verified_at)
+                                <span class="badge bg-danger">No</span>
+                            @else
+                                <span class="badge bg-success">Yes</span>
+                            @endempty
+                            </td>    
 
-                            <td>{{ $colaborator->detail->admission_date }}</td>
+                            <td>{{ $colaborator->department->name }}</td>
+                            <td>{{ $colaborator->role }}</td>
                             <td>{{ $colaborator->detail->city }}</td>
+                            <td>{{ $colaborator->detail->salary }} $</td>
 
                             <td>
                                 <div class="d-flex gap-3 justify-content-end">                                   
