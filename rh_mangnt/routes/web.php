@@ -56,11 +56,17 @@ Route::middleware("auth")->group(function(){
 
     Route::get("/rh-users/management/home", [RhManagementController::class, "home"])->name("rh.management.home");
     Route::get("/rh-users/management/new-colaborator", [RhManagementController::class, "newColaborator"])->name("rh.management.new-colaborator");
+    Route::post("/rh-users/management/create-colaborator", [RhManagementController::class, "createColaborator"])->name("rh.management.create-colaborator");
+    Route::get("/rh-users/management/edit-colaborator/{id}", [RhManagementController::class, "editColaborator"])->name("rh.management.edit-colaborator");
+    Route::post("/rh-users/management/update-colaborator", [RhManagementController::class, "updateColaborator"])->name("rh.management.update-colaborator");
+    Route::get("/rh-users/management/details/{id}", [RhManagementController::class, "showDetails"])->name("rh.management.details");
+    Route::get("/rh-users/management/delete/{id}", [RhManagementController::class, "deleteColaborator"])->name("rh.management.delete");
+    Route::get("/rh-users/management/delete-confirm/{id}", [RhManagementController::class, "deleteColaboratorConfirm"])->name("rh.management.delete-confirm");
+    Route::get("/rh-users/management/restore/{id}", [RhManagementController::class, "restoreColaborator"])->name("rh.management.restore");
 
     // admin colaborators list
     Route::get("/colaborators", [ColaboratorsController::class, "index"])->name("colaborators.all-colaborators");
     Route::get("/colaborators/details/{id}", [ColaboratorsController::class, "showDetails"])->name("colaborators.details");
-
     Route::get("/colaborators/delete/{id}", [ColaboratorsController::class, "deleteColaborator"])->name("colaborators.delete");
     Route::get("/colaborators/delete-confirm/{id}", [ColaboratorsController::class, "deleteColaboratorConfirm"])->name("colaborators.delete-confirm");
     Route::get("/colaborators/restore/{id}", [ColaboratorsController::class, "restoreColaborator"])->name("colaborators.restore");
