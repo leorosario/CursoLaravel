@@ -2,5 +2,5 @@
     <div class="display-6 text-center">LIVEWIRE</div>
     <hr>
 
-    <livewire:properties-component value3="Valor literal" :value4="$value4" />
+    @livewire('form-component')
 </x-layouts.main-layout>
