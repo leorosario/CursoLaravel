@@ -7,4 +7,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MainController::class, "home"]);
 Route::get("/clients", [MainController::class, "showClients"]);
-Route::get("/full-page", FullPageComponent::class);
+Route::get("/full-page/{number1}/{number2}", FullPageComponent::class);

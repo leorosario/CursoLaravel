@@ -8,6 +8,13 @@ use Livewire\Component;
 
 class FullPageComponent extends Component
 {
+    public $number1, $number2, $sum_result;
+    public function mount($number1, $number2)
+    {
+        $this->number1 = $number1;
+        $this->number2 = $number2;
+        $this->sum_result = $number1 + $number2;
+    }
     // #[Layout('components.layouts.new-layout')]
     #[Title('Full Page Component')]
     public function render()
