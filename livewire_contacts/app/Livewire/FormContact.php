@@ -2,34 +2,56 @@
 
 namespace App\Livewire;
 
+use App\Models\Contact;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class FormContact extends Component
 {
-    public $name, $email, $phone;
+    #[Validate('required|min:3|max:50')]
+    public $name;
+
+    #[Validate('required|email|min:5|max:50')]
+    public $email;
+
+    #[Validate('required|min:5|max:20')]
+    public $phone;
+
+    // error and success messages
+    public $error = '';
+    public $success = '';
 
     public function newContact()
     {
         // validation
-        $this->validate([
-            "name" => "required|min:3|max:50",
-            "email" => "required|email|min:5|max:50",
-            "phone" => "required|min:5|max:20"
-        ]);
+        $this->validate();
 
-        // temporary store in log file
-        Log::info("Novo contacto: " . $this->name . " - " . $this->email . " - " . $this->phone);
+        // store contact in database
+        $result = Contact::firstOrCreate(
+            [
+                'name' => $this->name,
+                'email' => $this->email
+            ],
+            [
+                'phone' => $this->phone
+            ]
+        );        
 
-        // clear form
+        // check for success or error
+        if($result->wasRecentlyCreated){            
+            // clear form
+            $this->reset();
+            
+            // success message
+            $this->success = "Contact created successfully.";
 
-        // option 1
-        // $this->name = "";
-        // $this->email = "";
-        // $this->phone = "";
-
-        // option 2
-        $this->reset();
+            // create an event
+            $this->dispatch("contactAdded");
+        }else{
+            // error message
+            $this->error = "The contact already exists.";
+        }
     }
 
     public function render()

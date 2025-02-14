@@ -28,6 +28,26 @@
         <div class="text-end">
             <button class="btn btn-secondary px-5">Save</button>
         </div>
+
+        @if ($error)
+            <div class="alert alert-danger text-center mt-3"
+                x-data="{ show: true}"
+                x-show="show"
+                x-init="setTimeout(() => show = false, 2000)"
+            >
+                {{ $error }}
+            </div>
+        @endif
+
+        @if ($success)
+            <div class="alert alert-success text-center mt-3"
+                x-data="{ show: true}"
+                x-show="show"
+                x-init="setTimeout(() => show = false, 2000)"
+            >
+                {{ $success }}
+            </div>
+        @endif
             
     </form>
 </div>
