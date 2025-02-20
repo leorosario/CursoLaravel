@@ -16,11 +16,7 @@ class FormContact extends Component
     public $email;
 
     #[Validate('required|min:5|max:20')]
-    public $phone;
-
-    // error and success messages
-    public $error = '';
-    public $success = '';
+    public $phone;   
 
     public function newContact()
     {
@@ -43,14 +39,23 @@ class FormContact extends Component
             // clear form
             $this->reset();
             
-            // success message
-            $this->success = "Contact created successfully.";
-
+            // success notification
             // create an event
             $this->dispatch("contactAdded");
+            $this->dispatch(
+                "notification",
+                type: "success",
+                title: "Contact created successfully.",
+                position: "center"
+            );
         }else{
-            // error message
-            $this->error = "The contact already exists.";
+            // error notification      
+            $this->dispatch(
+                "notification",
+                type: "error",
+                title: "The contact already exists.",
+                position: "center"
+            );
         }
     }
 
