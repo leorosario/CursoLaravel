@@ -94,4 +94,23 @@ class FileController extends Controller
         echo '<pre>';
         print_r($data);
     }
+
+    public function listFiles()
+    {
+
+        // $files = Storage::files();
+        $files = Storage::disk('local')->files(null, true);
+
+        echo '<pre>';
+        print_r($files);
+    }
+
+    public function deleteFile()
+    {
+        Storage::delete("file1.txt");
+        echo 'Ficheiro removido com sucesso.';
+
+        //delete all files
+        // Storage::delete(Storage::files());
+    }
 }

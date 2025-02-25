@@ -15,6 +15,8 @@
                     <a href="{{ route("storage.local.check.file")}}" class="btn btn-primary">Verificar a Existência de Arquivo</a>
                     <a href="{{ route("storage.local.store.json")}}" class="btn btn-primary">Guardar JSON</a>
                     <a href="{{ route("storage.local.read.json")}}" class="btn btn-primary">Ler JSON</a>
+                    <a href="{{ route("storage.local.list")}}" class="btn btn-primary">Listar Arquivos</a>
+                    <a href="{{ route("storage.local.delete")}}" class="btn btn-primary">Eliminar Arquivo</a>
                 </div>
             </div>
         </div>
