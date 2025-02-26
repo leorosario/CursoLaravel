@@ -14,3 +14,15 @@ Route::get("/storage_local_store_json", [FileController::class, "storageJSON"])-
 Route::get("/storage_local_read_json", [FileController::class, "readJSON"])->name("storage.local.read.json");
 Route::get("/storage_local_list", [FileController::class, "listFiles"])->name("storage.local.list");
 Route::get("/storage_local_delete", [FileController::class, "deleteFile"])->name("storage.local.delete");
+
+// folders
+Route::get("/storage_local_create_folder", [FileController::class, "createFolder"])->name("storage.local.create.folder");
+Route::get("/storage_local_delete_folder", [FileController::class, "deletefolder"])->name("storage.local.delete.folder");
+
+Route::get("/storage_local_list_files_metadata", [FileController::class, "listFilesWithMetadata"])->name("storage.local.list.files.metadata");
+Route::get("/storage_local_list_files_for_download", [FileController::class, "listFilesForDownload"])->name("storage.local.list.for-download");
+
+// download
+Route::get('/download/{file}', function($file){
+    return response()->download('storage/' . $file);
+})->name('download');

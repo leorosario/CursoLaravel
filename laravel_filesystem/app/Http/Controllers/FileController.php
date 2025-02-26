@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -110,7 +111,53 @@ class FileController extends Controller
         Storage::delete("file1.txt");
         echo 'Ficheiro removido com sucesso.';
 
-        //delete all files
+        // delete all files
         // Storage::delete(Storage::files());
+    }
+
+    public function createFolder()
+    {
+        Storage::makeDirectory('documents');
+        Storage::makeDirectory('documents/teste');
+    }
+
+    public function deleteFolder()
+    {
+        Storage::deleteDirectory('documents');
+    }
+
+    public function listFilesWithMetadata()
+    {
+        $list_files = Storage::allFiles();
+
+        $files = [];
+
+        foreach ($list_files as $file) {
+            $files[] = [
+                'name' => $file,
+                'size' => round(Storage::size($file) /1024, 2) . ' kb',
+                'last_modified' => Carbon::createFromTimestamp(Storage::lastModified($file))->format('d-m-Y H:i:s'),
+                'mime_type' => Storage::mimeType($file)
+            ];
+        }
+
+        return view('list-files-with-metadata', compact('files'));
+    }
+
+    public function listFilesForDownload()
+    {
+        $list_files = Storage::disk('public')->allFiles();
+
+        $files = [];
+
+        foreach ($list_files as $file) {
+            $files[] = [
+                'name' => $file,
+                'size' => round(Storage::disk('public')->size($file) /1024, 2) . ' kb',
+                'file' => basename($file)     
+            ];
+        }
+
+        return view('list-files-for-download', compact('files'));
     }
 }
