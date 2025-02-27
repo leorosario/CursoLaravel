@@ -160,4 +160,27 @@ class FileController extends Controller
 
         return view('list-files-for-download', compact('files'));
     }
+
+    public function uploadFile(Request $request)
+    {
+        // solução para guardar o ficheiro na pasta storage/app/uploads
+        // $request->file('arquivo')->store("uploads");
+
+        // para colocar o ficheiro na pasta storage/app/public
+        // $request->file('arquivo')->store('', "public");
+
+        //guardar o ficheiro com o nome original.
+        // $filename = $request->file('arquivo')->getClientOriginalName();
+        // $request->file('arquivo')->storeAs('', $filename, 'public');
+
+        // --------------------------------------------
+        // upload de ficheiro com validação
+        $request->validate([
+            'arquivo' => 'required|mimes:pdf,jpg,png|max:100'
+        ]);
+
+        $request->file('arquivo')->store('', 'public');
+
+        echo 'Ficheiro enviado com sucesso';
+    }
 }
