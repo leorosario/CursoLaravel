@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ApiResponse;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -24,16 +25,30 @@ class AuthController extends Controller
         ]);
 
         if(!$attempt){
-            return response()->json([
-                'error' => 'Unauthorized'
-            ], 401);
+            return ApiResponse::unauthorized();
         }
 
         // authenticate user
         $user = auth()->user();
-        $token = $user->createToken($user->name)->plainTextToken;
+
+        // assume o tempo de expiração que está configurado no Sanctum
+        // $token = $user->createToken($user->name)->plainTextToken;
+
+        $token = $user->createToken($user->name, ['*'], now()->addHour())->plainTextToken;
 
         // return the access token for the api requests
-        return response()->json(['token' => $token]);
+        return ApiResponse::success(
+            [
+                'user' => $user->name,
+                'email' => $user->email,
+                'token' => $token
+            ]
+        );
+    }
+    
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return ApiResponse::success('Logout with success');
     }
 }

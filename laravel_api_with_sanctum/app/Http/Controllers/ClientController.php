@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Services\ApiResponse;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -12,9 +13,14 @@ class ClientController extends Controller
      */
     public function index()
     {
+        // check if the token allows this result
+        if(!auth()->user()->tokenCan('clients:list')){
+            return ApiResponse::error('Access denied', 401);
+        }
+
         // return all clients in the database
 
-        return response()->json(Client::all(), 200);
+        return ApiResponse::success(Client::all());
     }
 
     /**
@@ -33,12 +39,7 @@ class ClientController extends Controller
 
         $client = Client::create($request->all());
 
-        return response()->json(
-            [
-                'message' => 'Client created successfully',
-                'data' => $client
-            ], 200
-        );
+        return ApiResponse::success($client);
     }
 
     /**
@@ -46,14 +47,19 @@ class ClientController extends Controller
      */
     public function show(string $id)
     {
+        // check if the token allows this result
+        if(!auth()->user()->tokenCan('clients:detail')){
+            return ApiResponse::error('Access denied', 401);
+        }
+
         // show client details
         $client = Client::find($id);
 
         // return a response
         if($client){
-            return response()->json($client, 200);
+            return ApiResponse::success($client);
         }else{
-            return response()->json(['message' => 'Client not found'], 404);
+            return ApiResponse::error('Client not found');
         }
     }
 
@@ -73,14 +79,9 @@ class ClientController extends Controller
         $client = Client::find($id);
         if($client){
             $client->update($request->all());
-            return response()->json(
-                [
-                    'message' => 'Client update successfully',
-                    'data' => $client
-                ], 200
-            );
+            return ApiResponse::success($client);
         }else{
-            return response()->json(['message' => 'Client not found'], 404);
+            return ApiResponse::error('Client not found');            
         }
     }
 
@@ -95,13 +96,9 @@ class ClientController extends Controller
 
         if($client){
             $client->delete();
-            return response()->json(
-                [
-                    'message' => 'Client delete successfully'                 
-                ], 200
-            );
+            return ApiResponse::success('Client deleted successfully');
         }else{
-            return response()->json(['message' => 'Client not found'], 404);
+            return ApiResponse::error('Client not found');            
         }
     }
 }
