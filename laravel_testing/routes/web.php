@@ -7,4 +7,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/show-hash', [MainController::class, 'showHash']);
+Route::get('/show-hash/{numchars?}', [MainController::class, 'showHash']);
